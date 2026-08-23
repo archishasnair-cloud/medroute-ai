@@ -414,6 +414,156 @@ This architecture protects sensitive data.
 
 ---
 
+# What is an API?
+
+API stands for Application Programming Interface.
+
+An API allows two software applications to communicate with each other.
+
+In MedRoute AI:
+
+React Frontend
+
+↓
+
+API Request
+
+↓
+
+Express Backend
+
+↓
+
+API Response
+
+For example:
+
+The frontend may request nearby hospitals using:
+
+GET /api/hospitals/nearby
+
+The backend processes the request and sends hospital data back.
+
+---
+
+# What is HTTP?
+
+HTTP stands for HyperText Transfer Protocol.
+
+HTTP is the communication protocol used between clients and servers on the web.
+
+When the frontend communicates with our backend, it will use HTTP requests.
+
+Common HTTP methods include:
+
+## GET
+
+Used to retrieve data.
+
+Example:
+
+GET /api/hospitals
+
+Meaning:
+
+"Give me the hospital data."
+
+## POST
+
+Used to create or send new data.
+
+Example:
+
+POST /api/users
+
+Meaning:
+
+"Create a new user."
+
+## PUT
+
+Used to update existing data.
+
+Example:
+
+PUT /api/users/10
+
+Meaning:
+
+"Update user 10."
+
+## DELETE
+
+Used to delete data.
+
+Example:
+
+DELETE /api/users/10
+
+Meaning:
+
+"Delete user 10."
+
+---
+
+# What is JSON?
+
+JSON stands for JavaScript Object Notation.
+
+JSON is a lightweight format used for exchanging data between applications.
+
+Modern REST APIs commonly send and receive JSON.
+
+Example:
+
+{
+  "name": "City Hospital",
+  "distance": 2.4,
+  "rating": 4.5
+}
+
+For MedRoute AI, our backend will usually return hospital information to the React frontend in JSON format.
+
+---
+
+# Example MedRoute AI API Flow
+
+Suppose the user clicks:
+
+"Find Nearby Hospitals"
+
+The frontend may send:
+
+GET /api/hospitals/nearby?lat=11.0168&lng=76.9558
+
+The backend receives:
+
+Latitude = 11.0168
+
+Longitude = 76.9558
+
+Then the backend:
+
+1. Searches nearby hospitals.
+2. Calculates distance.
+3. Calls required external APIs.
+4. Applies recommendation logic.
+5. Creates the response.
+
+Example JSON response:
+
+{
+  "hospitals": [
+    {
+      "name": "ABC Hospital",
+      "distance": 2.1,
+      "rating": 4.6
+    }
+  ]
+}
+
+The React frontend then displays this information to the user.
+
 # Key Takeaways
 
 ✔ A web application consists of a Client, Server and Database.
