@@ -1,4 +1,5 @@
 import express from "express";
+import hospitalRoutes from "./routes/hospital.routes";
 
 const app = express();
 
@@ -7,6 +8,8 @@ const PORT = 5000;
 app.get("/", (req, res) => {
     res.send("MedRoute AI API is running");
 });
+
+app.use("/api/hospitals", hospitalRoutes);
 
 app.listen(PORT, () => {
     console.log(`MedRoute AI server running on port ${PORT}`);
@@ -14,275 +17,145 @@ app.listen(PORT, () => {
 
 
 
-/*   
-# MedRoute AI - First Express Server
+/*
+============================================================
+SERVER.TS EXPLANATION
+============================================================
 
-## 1. Import Express
+1. import express from "express";
 
-Code:
+Imports Express into our backend.
 
-import express from "express";
 
-Explanation:
+2. import hospitalRoutes from "./routes/hospital.routes";
 
-Express is a Node.js web framework.
+Imports the hospital router that we created inside:
 
-We installed Express using:
+src/routes/hospital.routes.ts
 
-npm install express
+This allows server.ts to use all hospital-related routes.
 
-The import statement allows us to use Express inside server.ts.
 
----
+3. const app = express();
 
-## 2. Create Express Application
+Creates our Express application.
 
-Code:
 
-const app = express();
+4. const PORT = 5000;
 
-Explanation:
+Defines the port on which our backend server will run.
 
-express() creates an Express application.
-
-We store the application inside the variable:
-
-app
-
-The app variable represents our backend application.
-
-We will later use it for:
-
-app.get()
-
-app.post()
-
-app.put()
-
-app.delete()
-
-app.use()
-
----
-
-## 3. Define the Port
-
-Code:
-
-const PORT = 5000;
-
-Explanation:
-
-A port is a communication endpoint used by an application.
-
-Our backend will run on port:
-
-5000
-
-Therefore the local backend address will be:
+Backend address:
 
 http://localhost:5000
 
-localhost means our own computer.
 
-5000 is the port used by our backend.
+5. app.get("/", ...)
 
----
+Creates the root GET route.
 
-## 4. Create a GET Route
-
-Code:
-
-app.get("/", (req, res) => {
-    res.send("MedRoute AI API is running");
-});
-
-Explanation:
-
-app.get() creates a route that handles an HTTP GET request.
-
-"/" represents the root route.
-
-Therefore:
-
-GET /
-
-represents a GET request to:
+When we open:
 
 http://localhost:5000/
 
----
-
-## 5. req - Request
-
-req means Request.
-
-It contains information sent by the client to the server.
-
-Examples include:
-
-- URL parameters
-- Query parameters
-- Headers
-- Request body
-
-We are not using req yet.
-
-Later MedRoute AI may use it to receive information such as:
-
-- User location
-- Latitude
-- Longitude
-- Required medical department
-- Search filters
-
----
-
-## 6. res - Response
-
-res means Response.
-
-It is used by the server to send information back to the client.
-
-Example:
-
-res.send("MedRoute AI API is running");
-
-This sends the text:
+the server responds:
 
 MedRoute AI API is running
 
-back to the client.
 
----
+6. app.use("/api/hospitals", hospitalRoutes);
 
-## 7. Start the Server
+Connects our hospital router to the main Express application.
 
-Code:
+"/api/hospitals" is the base URL.
 
-app.listen(PORT, () => {
-    console.log(`MedRoute AI server running on port ${PORT}`);
-});
+Inside hospital.routes.ts we created:
 
-Explanation:
+router.get("/")
 
-app.listen() starts the Express server.
+Therefore Express combines them:
 
-PORT tells Express which port to listen on.
+/api/hospitals + /
 
-Since:
+Result:
 
-PORT = 5000
+GET /api/hospitals
 
-the server listens on:
+So opening:
 
-http://localhost:5000
+http://localhost:5000/api/hospitals
 
----
+will execute the route inside hospital.routes.ts.
 
-## 8. console.log()
 
-Code:
+7. app.listen(PORT, ...)
 
-console.log(`MedRoute AI server running on port ${PORT}`);
+Starts the Express server and listens for requests
+on port 5000.
 
-Explanation:
 
-console.log() prints information in the terminal.
-
-When our server successfully starts, the terminal should display:
-
-MedRoute AI server running on port 5000
-
----
-
-# Complete Request Flow
-
-When the user opens:
-
-http://localhost:5000/
-
-the following happens:
+============================================================
+CURRENT REQUEST FLOW
+============================================================
 
 Browser
 
-↓
+    ↓
 
-Sends GET request
+GET /api/hospitals
 
-↓
+    ↓
 
-Express server receives the request
+server.ts
 
-↓
+    ↓
 
-app.get("/") finds the matching route
+app.use("/api/hospitals", hospitalRoutes)
 
-↓
+    ↓
 
-Route function executes
+hospital.routes.ts
 
-↓
+    ↓
 
-res.send() sends the response
+router.get("/")
 
-↓
+    ↓
 
-Browser receives:
+res.json(...)
 
-MedRoute AI API is running
+    ↓
 
----
+Browser receives JSON response
 
-# Current Backend Structure
 
-server/
+============================================================
+WHY ARE ROUTES SEPARATE?
+============================================================
 
-├── src/
-│   └── server.ts
-│
-├── node_modules/
-├── package.json
-├── package-lock.json
-└── tsconfig.json
+We could put every API inside server.ts.
 
----
+But MedRoute AI will eventually have many APIs such as:
 
-# Important Concepts Learned
+/api/hospitals
+/api/users
+/api/auth
+/api/recommendations
 
-Express
+Keeping everything inside server.ts would make the file
+very large and difficult to maintain.
 
-Web framework used to create our backend.
+Therefore we separate routes into different files.
 
-app
+Example:
 
-Represents our Express application.
+routes/
 
-PORT
+hospital.routes.ts
+user.routes.ts
+auth.routes.ts
+recommendation.routes.ts
 
-Communication port used by the backend.
-
-app.get()
-
-Handles HTTP GET requests.
-
-req
-
-Request received from the client.
-
-res
-
-Response sent to the client.
-
-res.send()
-
-Sends a response to the client.
-
-app.listen()
-
-Starts the Express server.
-
-localhost
-
-Refers to our own computer.
+This makes the backend organized and scalable.
+============================================================
 */
